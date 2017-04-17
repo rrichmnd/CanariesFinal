@@ -75,7 +75,7 @@ def process_dataTrain(patient,labels_df,img_px_size=50, hm_slices=20):
     elif label == 0: label=np.array([1,0])
         
     return np.array(new_slices),label
-	
+
 #-----------------------------------------------------------------------------------------
 # process_dataNorm
 # IN: patient - patient ID
@@ -122,11 +122,11 @@ def process_dataNorm(patient,img_px_size=50, hm_slices=20):
 if sys.argv[0] == 'train':
     data_dir = 'training/'
     labels = pd.read_csv('train_data.csv', index_col=0)
-	train = True
+    train = True
 else:
     data_dir = 'patients/'
     labels = pd.read_csv('patient_data.csv', index_col=0)
-	train = False
+    train = False
 
 patients = os.listdir(data_dir)
 
@@ -134,14 +134,14 @@ for num,patient in enumerate(patients):
     if num % 100 == 0:
         print(num)
     try:
-        if train:		
-		   img_data,label = process_dataTrain(patient,labels,img_px_size=IMG_SIZE_PX, hm_slices=SLICE_COUNT)
+        if train:
+           img_data,label = process_dataTrain(patient,labels,img_px_size=IMG_SIZE_PX, hm_slices=SLICE_COUNT)
            print(img_data.shape,label)
            raw_data.append([img_data,label])
-		else:
-		   img_data = process_dataNorm(patient,img_px_size=IMG_SIZE_PX, hm_slices=SLICE_COUNT)
-		   print(img_data.shape)
-		   raw_data.append([img_data])
+        else:
+           img_data = process_dataNorm(patient,img_px_size=IMG_SIZE_PX, hm_slices=SLICE_COUNT)
+           print(img_data.shape)
+           raw_data.append([img_data])
     except KeyError as e:
         print('This is unlabeled data!')
 
