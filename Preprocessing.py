@@ -119,7 +119,9 @@ def process_dataNorm(patient,img_px_size=50, hm_slices=20):
  
     return np.array(new_slices)
 
-if sys.argv[0] == 'train':
+argument = sys.argv[1]
+
+if argument == 'train':
     data_dir = 'training/'
     labels = pd.read_csv('train_data.csv', index_col=0)
     train = True
