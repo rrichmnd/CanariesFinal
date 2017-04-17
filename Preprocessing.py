@@ -10,22 +10,10 @@ import math
 import sys
 
 
-data_dir = sys.argv[0]
-
-getLabels()
-
-patients = os.listdir(data_dir)
-
 raw_data = []
 
 IMG_SIZE_PX = 50
 SLICE_COUNT = 20
-
-def getLabels():
-    if data_dir == 'train':
-        labels = pd.read.csv('train_data.csv', index_col=0)
-    else:
-        labels = pd.read.csv('patient_data.csv', index_col=0)
 
 def chunks(l, n):
     # Credit: Ned Batchelder
@@ -34,12 +22,10 @@ def chunks(l, n):
     for i in range(0, len(l), n):
         yield l[i:i + n]
 
-
 def mean(a):
     return sum(a) / len(a)
 
-
-def process_data(patient,labels_df,img_px_size=50, hm_slices=20, visualize=False):
+def process_dataTrain(patient,labels_df,img_px_size=50, hm_slices=20, visualize=False):
     
     label = labels_df.get_value(patient, 'cancer')
     path = data_dir + patient
@@ -77,6 +63,14 @@ def process_data(patient,labels_df,img_px_size=50, hm_slices=20, visualize=False
         
     return np.array(new_slices),label
 
+if sys.argv[0] == 'train':
+    data_dir = 'training/'
+    labels = pd.read_csv('train_data.csv', index_col=0)
+else:
+    data_dir = 'patients/'
+    labels = pd.read_csv('patient_data.csv', index_col=0)
+
+patients = os.listdir(data_dir)
 
 for num,patient in enumerate(patients):
     if num % 100 == 0:
