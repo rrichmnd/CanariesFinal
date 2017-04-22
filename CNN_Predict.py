@@ -19,7 +19,7 @@ y = tf.placeholder('float')
 keep_rate = 0.8
 
 data_array = np.load('patientdata-50-50-20.npy')
-
+collection = []
 
 def conv3d(x, W):
     return tf.nn.conv3d(x, W, strides=[1,1,1,1,1], padding='SAME')
@@ -66,10 +66,10 @@ def train_neural_network(x):
     
     with tf.Session() as sess:
         restore_meta = tf.train.import_meta_graph('../tempModel/canariesModel.meta')
-        restore_meta.restore(sess, tf.train.latest_checkpoint('../tempModel/')
-        all_vars = tf.get_collection('vars')
-        
-        for v in all_vars:
+        restore_meta.restore(sess, tf.train.latest_checkpoint('../tempModel/'))
+        collection = tf.get_collection('vars')
+
+        for v in collection:
             for data in data_array:
                 try:
                     X = data[0]
