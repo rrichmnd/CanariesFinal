@@ -18,8 +18,7 @@ y = tf.placeholder('float')
 
 keep_rate = 0.8
 
-data_array = np.load('patientdata-50-50-20.npy')
-collection = []
+patient_data = np.load('patientdata-50-50-20.npy')
 
 def conv3d(x, W):
     return tf.nn.conv3d(x, W, strides=[1,1,1,1,1], padding='SAME')
@@ -61,24 +60,21 @@ def convolutional_neural_network(x):
     return output
 
 def train_neural_network(x):
-    prediction = convolutional_neural_network(x)
-    cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=prediction,labels=y))
-    
+    prediction = convolutional_neural_network(x, keep_rate)
+    probabilities = tf.nn.softmax(prediction)
     with tf.Session() as sess:
-        restore_meta = tf.train.import_meta_graph('../tempModel/canariesModel.meta')
-        restore_meta.restore(sess, tf.train.latest_checkpoint('../tempModel/'))
-        collection = tf.get_collection('vars')
-
-        for v in collection:
-            for data in data_array:
-                try:
-                    X = data[0]
-                    Y = data[1]
-                    _, c = sess.run([v, cost], feed_dict={x: X, y: Y})
-                except Exception as e:
-                    print(str(e))
-            
-            correct = tf.equal(tf.argmax(prediction, 1), tf.argmax(y, 1))
-            print ('%s' % correct)
+        #tf.reset_default_graph()
+        saver.restore(sess,"../tempModel/canariesModel.ckpt")
+        
+        sol = []
+        for data in patient_data:
+            X = data[0]
+            id = data[1]
+            probs = probabilities.eval(feed_dict={x: X, keep_rate: 1.})
+            pred = prediction.eval(feed_dict={x: X, keep_rate: 1.})
+            print('Outputs: ',pred)
+            print('Probs: ',probs)
+            sol.append([id, probs[0,1]])
+        print(sol)
 
 train_neural_network(x)
