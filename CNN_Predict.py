@@ -63,9 +63,10 @@ def train_neural_network(x):
     prediction = convolutional_neural_network(x)
     probabilities = tf.nn.softmax(prediction)
     with tf.Session() as sess:
-        #tf.reset_default_graph()
-        tf.train.Saver().restore(sess,"../tempModel/canariesModel.ckpt")
-        
+        saver = tf.train.Saver()
+        saver.restore(sess, 'Model/checkpoint/')
+        print(sess.run(tf.all_variables()))
+         
         sol = []
         for data in patient_data:
             X = data[0]
