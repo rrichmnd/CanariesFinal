@@ -119,7 +119,10 @@ def process_dataNorm(patient,img_px_size=50, hm_slices=20):
  
     return np.array(new_slices)
 
-argument = sys.argv[1]
+if len(sys.argv) > 1:
+    argument = sys.argv[1]
+else:
+    argument = ''
 
 if argument == 'train':
     data_dir = 'training/'
@@ -147,11 +150,10 @@ for num,patient in enumerate(patients):
     except KeyError as e:
         print('This is unlabeled data!')
 
-
 if train:
-    np.save('traindata-{}-{}-{}.npy'.format(IMG_SIZE_PX,IMG_SIZE_PX,SLICE_COUNT), raw_data)
+    np.save('traindata.npy', raw_data)
 else:
-    np.save('patientdata-{}-{}-{}.npy'.format(IMG_SIZE_PX,IMG_SIZE_PX,SLICE_COUNT), raw_data)
+    np.save('patientdata.npy', raw_data)
 
 
 

@@ -18,7 +18,7 @@ y = tf.placeholder('float')
 
 keep_rate = 0.8
 
-patient_data = np.load('patientdata-50-50-20.npy')
+patient_data = np.load('patientdata.npy')
 
 def conv3d(x, W):
     return tf.nn.conv3d(x, W, strides=[1,1,1,1,1], padding='SAME')
@@ -28,9 +28,9 @@ def maxpool3d(x):
     return tf.nn.max_pool3d(x, ksize=[1,2,2,2,1], strides=[1,2,2,2,1], padding='SAME')
 
 def convolutional_neural_network(x):
-    #                # 5 x 5 x 5 patches, 1 channel, 32 features to compute.
+    #                # 3 x 3 x 3 patches, 1 channel, 32 features to compute.
     weights = {'W_conv1':tf.Variable(tf.random_normal([3,3,3,1,32])),
-               #       5 x 5 x 5 patches, 32 channels, 64 features to compute.
+               #       3 x 3 x 3 patches, 32 channels, 64 features to compute.
                'W_conv2':tf.Variable(tf.random_normal([3,3,3,32,64])),
                #                                  64 features
                'W_fc':tf.Variable(tf.random_normal([54080,1024])),
