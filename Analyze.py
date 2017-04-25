@@ -1,4 +1,5 @@
 
+
 # Code taken from Guido Zuidhof's Preprocessing tutorial found here: https://www.kaggle.com/teamcanaries/data-science-bowl-2017/first-pass-through-data-w-3d-convnet-1e8ef4/editnb
 # Initial tutorial was a large ipython notebook. We have condesed this to a single python script and made it usable for our application. 
 # To run:
@@ -59,23 +60,22 @@ def convolutional_neural_network(x):
 
     return output
 
-def train_neural_network(x):
+def analyzeScans(x):
     prediction = convolutional_neural_network(x)
     probabilities = tf.nn.softmax(prediction)
     with tf.Session() as sess:
         saver = tf.train.Saver()
-        saver.restore(sess, 'Model/checkpoint/')
-        print(sess.run(tf.all_variables()))
+        saver.restore(sess, './Model/canariesModel.ckpt')
+        sess.run(tf.all_variables())
          
         sol = []
         for data in patient_data:
             X = data[0]
-            id = data[1]
+            id = data[0]
             probs = probabilities.eval(feed_dict={x: X, keep_rate: 1.})
             pred = prediction.eval(feed_dict={x: X, keep_rate: 1.})
             print('Outputs: ',pred)
             print('Probs: ',probs)
             sol.append([id, probs[0,1]])
-        print(sol)
 
-train_neural_network(x)
+analyzeScans(x)

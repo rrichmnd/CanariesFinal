@@ -20,8 +20,8 @@ keep_rate = 0.8
 
 data_array = np.load('traindata.npy')
 
-train_pct = .75
-validate_pct = .25
+train_pct = .10
+validate_pct = .10
 arraysize = data_array.size
 
 train_size = int(arraysize * train_pct)
@@ -77,7 +77,7 @@ def train_neural_network(x):
     print ("training data size: %s" % train_size)
     print ("validate data size: %s" % validate_size)
 
-    hm_epochs = 25
+    hm_epochs = 5
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
         
@@ -108,7 +108,7 @@ def train_neural_network(x):
         print('Accuracy:',accuracy.eval({x:[i[0] for i in validation_data], y:[i[1] for i in validation_data]}))
         
         print('fitment percent:',successful_runs/total_runs)
-        save_path = tf.train.Saver().save(sess, "canariesModel")
+        save_path = tf.train.Saver().save(sess, "Model/canariesModel.ckpt")
         print ("Model saved: %s" % save_path)
 
 train_neural_network(x)
