@@ -20,8 +20,8 @@ keep_rate = 0.8
 
 data_array = np.load('traindata.npy')
 
-train_pct = .10
-validate_pct = .10
+train_pct = .75
+validate_pct = .25
 arraysize = data_array.size
 
 train_size = int(arraysize * train_pct)
@@ -77,7 +77,7 @@ def train_neural_network(x):
     print ("training data size: %s" % train_size)
     print ("validate data size: %s" % validate_size)
 
-    hm_epochs = 5
+    hm_epochs = 30
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
         
