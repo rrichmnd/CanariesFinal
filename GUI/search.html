@@ -85,7 +85,12 @@
 
 	<form>
 		Patient Search: <input type="search" name="psearch">
+
+		<!-- Once Submit is hit the images will be unzipped and sent to be preprocessed -->
 		<input type="submit" value="Search">
+
+		<!-- Need to have a button for when the images are preprocessed and need to be sent to be analized -->
+		
 	</form>
 
 	<!-- Trigger/Open The Modal -->
@@ -112,7 +117,7 @@
 	<script>
 		function printID(){
 			var x = document.getElementById("patientid").value;
-			document.getElementById("demo").innerHTML = x
+			document.getElementById("idDisplay").innerHTML = x
 		}
 	</script>
 
@@ -160,14 +165,14 @@
 
 	<br><br>
 	
-	<p>Patient ID:</p> <p id="demo"></p>
+	<p>Patient ID:</p> <p id="idDisplay"></p>
 
 	<br><br>
 
 	<div style='display: none;' id="uploadimage">
 		<form>
 			Select Images to Upload: <input type='file' name='img' multiple>
-			<input type="Submit">
+			<input type="Submit" value="Upload">
 		</form>
 
 	</div>
