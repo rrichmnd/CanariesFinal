@@ -74,7 +74,7 @@ def analyzeScans(x):
         sol = []
         for data in patient_data:
             X = data[0]
-            id = data[0]
+            id = data[1]
             probs = probabilities.eval(feed_dict={x: X, keep_rate: 1.})
             pred = prediction.eval(feed_dict={x: X, keep_rate: 1.})
             writeCSV = csv.writer(csvFile)

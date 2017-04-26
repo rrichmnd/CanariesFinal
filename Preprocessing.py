@@ -144,9 +144,9 @@ for num,patient in enumerate(patients):
            print(img_data.shape,label)
            raw_data.append([img_data,label])
         else:
-           img_data = process_dataNorm(patient,img_px_size=IMG_SIZE_PX, hm_slices=SLICE_COUNT)
-           print(img_data.shape)
-           raw_data.append([img_data])
+           img_data,label = process_dataNorm(patient,labels,img_px_size=IMG_SIZE_PX, hm_slices=SLICE_COUNT)
+           print(img_data.shape,label)
+           raw_data.append([img_data,label])
     except KeyError as e:
         print('This is unlabeled data!')
 
