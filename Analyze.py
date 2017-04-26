@@ -7,6 +7,7 @@
 
 import tensorflow as tf
 import numpy as np
+import csv
 
 IMG_SIZE_PX = 50
 SLICE_COUNT = 20
@@ -17,9 +18,11 @@ batch_size = 10
 x = tf.placeholder('float')
 y = tf.placeholder('float')
 
-keep_rate = 0.8
+keep_rate = 1.0
 
 patient_data = np.load('patientdata.npy')
+
+csvFile = open('patient_data.csv', 'wb')
 
 def conv3d(x, W):
     return tf.nn.conv3d(x, W, strides=[1,1,1,1,1], padding='SAME')
@@ -66,7 +69,7 @@ def analyzeScans(x):
     with tf.Session() as sess:
         saver = tf.train.Saver()
         saver.restore(sess, './Model/canariesModel.ckpt')
-        sess.run(tf.all_variables())
+        sess.run(tf.global_variables())
          
         sol = []
         for data in patient_data:
@@ -74,8 +77,9 @@ def analyzeScans(x):
             id = data[0]
             probs = probabilities.eval(feed_dict={x: X, keep_rate: 1.})
             pred = prediction.eval(feed_dict={x: X, keep_rate: 1.})
-            print('Outputs: ',pred)
-            print('Probs: ',probs)
+            writeCSV = csv.writer(csvFile)
+            writeCSV.writerow(id,probs)
             sol.append([id, probs[0,1]])
+    csvFile.close()            
 
 analyzeScans(x)

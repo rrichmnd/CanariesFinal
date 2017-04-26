@@ -77,7 +77,7 @@ def train_neural_network(x):
     print ("training data size: %s" % train_size)
     print ("validate data size: %s" % validate_size)
 
-    hm_epochs = 30
+    hm_epochs = 25
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
         
