@@ -104,6 +104,7 @@ def analyzeScans(x):
             else:
                 diagnosis = 0
             sol.append([id, diagnosis])
+            print(id, diagnosis)
     with open(csvFile, "w") as output:
         writer = csv.writer(output, lineterminator='\n')
         for val in sol:
