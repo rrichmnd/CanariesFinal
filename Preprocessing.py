@@ -1,4 +1,4 @@
-# Code taken from Sentdex's  Preprocessing tutorial found here: https://www.kaggle.com/sentdex/data-science-bowl-2017/first-pass-through-data-w-3d-convnet/notebook
+# Code taken from user Sentdex's  Preprocessing tutorial found here: https://www.kaggle.com/sentdex/data-science-bowl-2017/first-pass-through-data-w-3d-convnet/notebook
 # Initial tutorial was a large ipython notebook. We have condesed this to a single python script and made it usable for our application. 
 
 import numpy as np
@@ -28,7 +28,7 @@ def mean(a):
     return sum(a) / len(a)
 
 #-----------------------------------------------------------------------------------------
-# process_dataTrain
+# process_data
 # IN: patient - patient ID
 #     labels_df - data value for the cancer prognosis
 # OUT: Numpy array of the slices from patient file,
@@ -41,6 +41,7 @@ def mean(a):
 def process_dataTrain(patient,labels_df,img_px_size=50, hm_slices=20):
     
     label = labels_df.get_value(patient, 'cancer')
+    print(label)
     path = data_dir + patient
     print('%s' % path)
     slices = [dicom.read_file(path + '/' + s) for s in os.listdir(path)]
@@ -79,16 +80,18 @@ def process_dataTrain(patient,labels_df,img_px_size=50, hm_slices=20):
 #-----------------------------------------------------------------------------------------
 # process_dataNorm
 # IN: patient - patient ID
+#     labels_df - data lable for cancer diagnosis
 # OUT: Numpy array of the slices from patient file, patient ID used for label
 #
 # FUNCTION: Takes the raw dicom image files from each patient folder, sorts them 
 # for processing and combinition for 3D array output. Function also resizes image files
 # to 50 x 50 pixel images. Function used when processing images for non-training analysis
 #-----------------------------------------------------------------------------------------
-def process_dataNorm(patient,img_px_size=50, hm_slices=20):
+def process_dataNorm(patient, img_px_size=50, hm_slices=20):
     
+   # label = labels_df.get_value(patient,'cancer')
     path = data_dir + patient
-    print('%s' % path)
+    print(path)
     slices = [dicom.read_file(path + '/' + s) for s in os.listdir(path)]
     slices.sort(key = lambda x: int(x.ImagePositionPatient[2]))
 
@@ -144,9 +147,9 @@ for num,patient in enumerate(patients):
            print(img_data.shape,label)
            raw_data.append([img_data,label])
         else:
-           img_data,label = process_dataNorm(patient,labels,img_px_size=IMG_SIZE_PX, hm_slices=SLICE_COUNT)
-           print(img_data.shape,label)
-           raw_data.append([img_data,label])
+           img_data = process_dataNorm(patient, img_px_size=IMG_SIZE_PX, hm_slices=SLICE_COUNT)
+           print(img_data.shape,patient)
+           raw_data.append([img_data,patient])
     except KeyError as e:
         print('This is unlabeled data!')
 

@@ -1,5 +1,3 @@
-
-
 # Code taken from Guido Zuidhof's Preprocessing tutorial found here: https://www.kaggle.com/teamcanaries/data-science-bowl-2017/first-pass-through-data-w-3d-convnet-1e8ef4/editnb
 # Initial tutorial was a large ipython notebook. We have condesed this to a single python script and made it usable for our application. 
 # To run:
@@ -22,7 +20,7 @@ keep_rate = 1.0
 
 patient_data = np.load('patientdata.npy')
 
-csvFile = open('patient_data.csv', 'wb')
+csvFile = 'patient_output.csv'
 
 def conv3d(x, W):
     return tf.nn.conv3d(x, W, strides=[1,1,1,1,1], padding='SAME')
@@ -75,11 +73,17 @@ def analyzeScans(x):
         for data in patient_data:
             X = data[0]
             id = data[1]
-            probs = probabilities.eval(feed_dict={x: X, keep_rate: 1.})
-            pred = prediction.eval(feed_dict={x: X, keep_rate: 1.})
-            writeCSV = csv.writer(csvFile)
-            writeCSV.writerow(id,probs)
-            sol.append([id, probs[0,1]])
-    csvFile.close()            
+            probs = probabilities.eval(feed_dict={x: X, y: keep_rate})
+            pred = prediction.eval(feed_dict={x: X, y: keep_rate})
+            if pred[0,1] > 0:
+                diagnosis = 1
+            else:
+                diagnosis = 0
+            sol.append([id, diagnosis])
+    with open(csvFile, "w") as output:
+        writer = csv.writer(output, lineterminator='\n')
+        for val in sol:
+            writer.writerow(val)
+    print("Analyze complete, .CSV file updated")
 
 analyzeScans(x)
