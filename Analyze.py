@@ -1,7 +1,8 @@
-# Code taken from Guido Zuidhof's Preprocessing tutorial found here: https://www.kaggle.com/teamcanaries/data-science-bowl-2017/first-pass-through-data-w-3d-convnet-1e8ef4/editnb
-# Initial tutorial was a large ipython notebook. We have condesed this to a single python script and made it usable for our application. 
-# To run:
-# train_neural_network(x)
+# Code developed using Harrison Kinsley's iPython notebook tutorial found here: 
+# https://www.kaggle.com/sentdex/data-science-bowl-2017/first-pass-through-data-w-3d-convnet/notebook
+#  
+# To run stand alone:
+# call Analyze.py from the command line using local python 3 command
 
 import tensorflow as tf
 import numpy as np
@@ -22,13 +23,30 @@ patient_data = np.load('patientdata.npy')
 
 csvFile = 'patient_output.csv'
 
+#--------------------------------------------------------------------------------
+# conv3d
+#
+# initialze 3 dimensional convolutional neural network
+#--------------------------------------------------------------------------------
 def conv3d(x, W):
     return tf.nn.conv3d(x, W, strides=[1,1,1,1,1], padding='SAME')
 
+#--------------------------------------------------------------------------------
+# maxpool3d
+#
+# initialize the pool size for convolutional neural network
+#--------------------------------------------------------------------------------
 def maxpool3d(x):
     #                        size of window         movement of window as you slide about
     return tf.nn.max_pool3d(x, ksize=[1,2,2,2,1], strides=[1,2,2,2,1], padding='SAME')
 
+
+#--------------------------------------------------------------------------------
+# convolutional_neural_network
+#
+# creates the convolutional neural network weighting to be used for analyzing 
+# patient data against the restored and trained neural network
+#--------------------------------------------------------------------------------
 def convolutional_neural_network(x):
     #                # 3 x 3 x 3 patches, 1 channel, 32 features to compute.
     weights = {'W_conv1':tf.Variable(tf.random_normal([3,3,3,1,32])),
@@ -61,6 +79,12 @@ def convolutional_neural_network(x):
 
     return output
 
+#--------------------------------------------------------------------------------
+# analyzeScans
+#
+# Restores trained neural network and checks patient image array against trained
+# neural network. Saves prediction to .CSV file to be accessed by GUI
+#--------------------------------------------------------------------------------
 def analyzeScans(x):
     prediction = convolutional_neural_network(x)
     probabilities = tf.nn.softmax(prediction)

@@ -1,8 +1,8 @@
-
-# Code taken from Guido Zuidhof's Preprocessing tutorial found here: https://www.kaggle.com/teamcanaries/data-science-bowl-2017/first-pass-through-data-w-3d-convnet-1e8ef4/editnb
-# Initial tutorial was a large ipython notebook. We have condesed this to a single python script and made it usable for our application. 
-# To run:
-# train_neural_network(x)
+# Code developed using Harrison Kinsley's iPython notebook tutorial found here: 
+# https://www.kaggle.com/sentdex/data-science-bowl-2017/first-pass-through-data-w-3d-convnet/notebook
+#  
+# To run stand alone:
+# call Training.py from the command line using local python 3 command
 
 import tensorflow as tf
 import numpy as np
@@ -30,13 +30,29 @@ validate_size = int((arraysize * validate_pct) * -1)
 train_data = data_array[:train_size]
 validation_data = data_array[validate_size:]
 
+#--------------------------------------------------------------------------------
+# conv3d
+#
+# initialze 3 dimensional convolutional neural network
+#--------------------------------------------------------------------------------
 def conv3d(x, W):
     return tf.nn.conv3d(x, W, strides=[1,1,1,1,1], padding='SAME')
 
+#--------------------------------------------------------------------------------
+# maxpool3d
+#
+# initialize the pool size for convolutional neural network
+#--------------------------------------------------------------------------------
 def maxpool3d(x):
     #                        size of window         movement of window as you slide about
     return tf.nn.max_pool3d(x, ksize=[1,2,2,2,1], strides=[1,2,2,2,1], padding='SAME')
 
+#--------------------------------------------------------------------------------
+# convolutional_neural_network
+#
+# creates the convolutional neural network weighting to be used for analyzing 
+# patient data and train the neural network
+#--------------------------------------------------------------------------------
 def convolutional_neural_network(x):
     #                # 3 x 3 x 3 patches, 1 channel, 32 features to compute.
     weights = {'W_conv1':tf.Variable(tf.random_normal([3,3,3,1,32])),
@@ -69,14 +85,20 @@ def convolutional_neural_network(x):
 
     return output
 
+#---------------------------------------------------------------------------------------
+# train_neural_network
+#
+# Function used to train and save the convolutional neural network. Uses the processed
+# numpy array for training and validation. Training amount set with train_data setup, 
+# and validation amount set with validation_data setup. 
+# hm_epochs is number of times it runs through the training algorithm. 
+# Tests accuracy after each epoch, and after all epochs are complete. 
+#---------------------------------------------------------------------------------------
 def train_neural_network(x):
     prediction = convolutional_neural_network(x)
     cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=prediction,labels=y))
     optimizer = tf.train.AdamOptimizer(learning_rate=1e-3).minimize(cost)
-    
-    print ("training data size: %s" % train_size)
-    print ("validate data size: %s" % validate_size)
-
+        
     hm_epochs = 25
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())

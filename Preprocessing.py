@@ -1,6 +1,10 @@
-# Code taken from user Sentdex's  Preprocessing tutorial found here: https://www.kaggle.com/sentdex/data-science-bowl-2017/first-pass-through-data-w-3d-convnet/notebook
-# Initial tutorial was a large ipython notebook. We have condesed this to a single python script and made it usable for our application. 
-
+# Code developed using Harrison Kinsley's iPython notebook tutorial found here: 
+# https://www.kaggle.com/sentdex/data-science-bowl-2017/first-pass-through-data-w-3d-convnet/notebook
+# and Guido Zuidhof's iPython notebook tutorial found here:
+# https://www.kaggle.com/gzuidhof/data-science-bowl-2017/full-preprocessing-tutorial/notebook
+#  
+# To run stand alone:
+# call Preprocessing.py from the command line using local python 3 command
 import numpy as np
 import pandas as pd
 import dicom
@@ -89,7 +93,6 @@ def process_dataTrain(patient,labels_df,img_px_size=50, hm_slices=20):
 #-----------------------------------------------------------------------------------------
 def process_dataNorm(patient, img_px_size=50, hm_slices=20):
     
-   # label = labels_df.get_value(patient,'cancer')
     path = data_dir + patient
     print(path)
     slices = [dicom.read_file(path + '/' + s) for s in os.listdir(path)]
@@ -121,6 +124,10 @@ def process_dataNorm(patient, img_px_size=50, hm_slices=20):
         new_slices[hm_slices-1] = new_val
  
     return np.array(new_slices)
+
+#----------------------------------------------------------------------------------------
+# Script functionality and flow control
+#----------------------------------------------------------------------------------------
 
 if len(sys.argv) > 1:
     argument = sys.argv[1]
