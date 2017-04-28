@@ -1,4 +1,4 @@
-To access our code functionality, please download the repo.
+To access our code functionality, please download the whole repo, or simply canaries_final_code.tar.gz
 You will need to structure your directory following the below instructions, placing your DICOM image files in the appropriate sub directories. 
 
 You will also need to install the below Python libraries to be used with Python 3 or greater. Instructions for installation can be found by following the provided links for each library. 
